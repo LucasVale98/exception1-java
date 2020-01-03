@@ -52,9 +52,17 @@ public class Reserva {
 		return TimeUnit.DAYS.convert(dif, TimeUnit.MICROSECONDS);
 	}
 	
-	public void atulizarReserva(Date checkIn, Date checkOut) {
+	public String atulizarReserva(Date checkIn, Date checkOut) {
+		Date agora = new Date();
+		if (!checkIn.before(agora) || checkOut.before(agora)) {
+			return "Erro na reserva: A atulização na reseva so pode ser de datas futuras";
+		}
+		if (!checkOut.after(checkIn)) {
+			return "Erro na reserva: Data do checkOut é maior que a data de checkIn.";
+		}
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
+		return null;
 	}
 	
 	

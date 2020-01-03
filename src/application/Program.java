@@ -1,5 +1,6 @@
 package application;
 
+import java.sql.Struct;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -33,17 +34,12 @@ public class Program {
 			System.out.println("Data do Check-Out (dd/MM/yyyy)");
 			checkOut = SDF.parse(sc.next());
 			
-			Date agora = new Date();
-			if (checkIn.before(agora) || checkOut.before(agora)) {
-				System.out.println("Erro na reserva: A atulização na reseva so pode ser de datas futuras");
-			}
-			else if (!checkOut.after(checkIn)) {
-				System.out.println("Erro na reserva: Data do checkOut é maior que a data de checkIn.");
+			String error =  reserva.atulizarReserva(checkIn, checkOut);
+			if (error != null) {
+				System.out.println("Erro na reserva: " + error);
 			}else {
-				reserva.atulizarReserva(checkIn, checkOut);
 				System.out.println("Reserva: " + reserva);
 			}
-			
 		}
 		
 		sc.close();
