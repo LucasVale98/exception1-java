@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import model.excption.DominioExceptions;
+
 public class Reserva {
 	private Integer numeroQuarto;
 	private Date checkIn;
@@ -16,8 +18,10 @@ public class Reserva {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Reserva(Integer numeroQuarto, Date chechIn, Date checkOut) {
-		super();
+	public Reserva(Integer numeroQuarto, Date chechIn, Date checkOut) throws DominioExceptions {
+		if (!checkOut.after(checkIn)) {
+			throw new DominioExceptions("Erro na reserva: Data do checkOut é maior que a data de checkIn.");
+		}
 		this.numeroQuarto = numeroQuarto;
 		this.checkIn = chechIn;
 		this.checkOut = checkOut;
@@ -52,17 +56,16 @@ public class Reserva {
 		return TimeUnit.DAYS.convert(dif, TimeUnit.MICROSECONDS);
 	}
 	
-	public String atulizarReserva(Date checkIn, Date checkOut) {
+	public void atulizarReserva(Date checkIn, Date checkOut) throws DominioExceptions{
 		Date agora = new Date();
-		if (!checkIn.before(agora) || checkOut.before(agora)) {
-			return "Erro na reserva: A atulização na reseva so pode ser de datas futuras";
+		if (checkIn.before(agora) || checkOut.before(agora)) {
+			throw new DominioExceptions("Erro na reserva: A atulização na reseva so pode ser de datas futuras");
 		}
 		if (!checkOut.after(checkIn)) {
-			return "Erro na reserva: Data do checkOut é maior que a data de checkIn.";
+			throw new DominioExceptions("Erro na reserva: Data do checkOut é maior que a data de checkIn.");
 		}
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
-		return null;
 	}
 	
 	
